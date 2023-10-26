@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +39,35 @@ public class EmployeeController {
 		
 		return theEmployee;
 	}
+	
+	//add mapping for post - add new employee
+	@PostMapping("/employees")
+	public Employee addEmployee(@RequestBody Employee theEmployee) {
+		repository.save(theEmployee);
+		return theEmployee;
+	}
+	
+	//update existing employee
+	@PutMapping("/employees")
+	public Employee updatedEmployee(@RequestBody Employee theEmployee) {
+		repository.save(theEmployee);
+		return theEmployee;
+	}
+	
+	//delete employee
+	@DeleteMapping("/employees/{id}")
+	public String deleteEmployee(@PathVariable Integer id) throws Exception{
+		Optional<Employee> theEmployee = repository.findById(id);
+		
+		if(theEmployee.isEmpty())
+			throw new Exception("Employee id not found - "+id);
+		
+		repository.deleteById(id);
+		
+		return "Delete employee id - "+id;
+	}
+	
+	
 	
 
 }
